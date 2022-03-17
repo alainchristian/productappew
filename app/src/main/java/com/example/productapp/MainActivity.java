@@ -1,20 +1,30 @@
 package com.example.productapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    ImageView prodImage;
+    public static final int MYREQ_COD=1001;
+    Uri imagePath;
+    Bitmap btmpImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.ic_record);
         View view = LayoutInflater.from(this).inflate(R.layout.productform,null);
         builder.setView(view);
+        prodImage=view.findViewById(R.id.prdImage);
+        prodImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+            }
+        });
         builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -68,5 +85,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void openGallery() {
+        try {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent,MYREQ_COD);
+
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==MYREQ_COD && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+            try {
+                imagePath =data.getData();
+                btmpImage = MediaStore.Images.Media.getBitmap(getContentResolver(),imagePath);
+                prodImage.setImageBitmap(btmpImage);
+
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
