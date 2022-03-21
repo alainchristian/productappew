@@ -5,9 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MYREQ_COD=1001;
     Uri imagePath;
     Bitmap btmpImage;
+    Button btnSend,btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,36 +62,39 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this,ShowProducts.class));
 
     }
-
+    AlertDialog.Builder builder;
+    Dialog dialog;
     private void showProductForm() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("Product recording");
-        builder.setMessage("Record all products as reuired");
-        builder.setIcon(R.drawable.ic_record);
-        View view = LayoutInflater.from(this).inflate(R.layout.productform,null);
-        builder.setView(view);
-        prodImage=view.findViewById(R.id.prdImage);
+        dialog=new Dialog(this);
+        //builder=new AlertDialog.Builder(this);
+        //builder.setTitle("Product recording");
+        //builder.setMessage("Record all products as reuired");
+        //builder.setIcon(R.drawable.ic_record);
+        //View view = LayoutInflater.from(this).inflate(R.layout.productform,null);
+        //builder.setView(view);
+        dialog.setContentView(R.layout.productform);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        prodImage=dialog.findViewById(R.id.prdImage);
+        btnSend=dialog.findViewById(R.id.btnSend);
+        btnCancel=dialog.findViewById(R.id.btnCancel);
         prodImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openGallery();
             }
         });
-        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //
-            }
-        });
-        builder.show();
-    }
+            public void onClick(View view) {
 
+            }
+        });
+       //builder.create(dialog);
+        dialog.show();
+    }
+    public void hideDialog(View view){
+        dialog.dismiss();
+    }
     private void openGallery() {
         try {
             Intent intent = new Intent();

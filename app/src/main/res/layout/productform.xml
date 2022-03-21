@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@drawable/shape_rect"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -56,6 +57,36 @@
             android:hint="Description"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:id="@+id/btnCancel"
+            android:text="Cancel"
+            android:textColor="@color/myColor"
+            android:layout_marginTop="30dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:backgroundTint="@color/white"
+            android:onClick="hideDialog"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:id="@+id/btnSend"
+            android:text="Send"
+            android:textColor="@color/myColor"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:backgroundTint="@color/white"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
 
 
 

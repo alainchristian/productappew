@@ -32,6 +32,7 @@ public class ProductRVAdapter extends RecyclerView.Adapter<VH> {
         holder.tvName.setText(product.getProdName());
         holder.tvDesc.setText(product.getProdDescr());
         holder.tvPrice.setText((int) product.getProdPrice());
+        holder.prodImage.setImageBitmap(product.getBitmapImage());
 
     }
 
