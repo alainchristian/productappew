@@ -72,21 +72,24 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     Dialog dialog;
     private void showProductForm() {
-        dialog=new Dialog(this);
         myHelper = new ProductDBHelper(this);
-        //builder=new AlertDialog.Builder(this);
+        builder=new AlertDialog.Builder(this);
+        dialog=new Dialog(this);
+
         //builder.setTitle("Product recording");
         //builder.setMessage("Record all products as reuired");
-        //builder.setIcon(R.drawable.ic_record);
-        //View view = LayoutInflater.from(this).inflate(R.layout.productform,null);
-        //builder.setView(view);
-        dialog.setContentView(R.layout.productform);
+        ///builder.setIcon(R.drawable.ic_record);
+        View view = LayoutInflater.from(this).inflate(R.layout.productform,null);
+        builder.setView(view);
+        dialog=builder.create();
+        dialog.setContentView(view);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         prodImage=dialog.findViewById(R.id.prdImage);
         btnSend=dialog.findViewById(R.id.btnSend);
         btnCancel=dialog.findViewById(R.id.btnCancel);
         prdNameEt=dialog.findViewById(R.id.prdName);
         prdPriceEt=dialog.findViewById(R.id.prdPrice);
+        prdPriceEt.setText(""+0);
         prdDescriptionEt=dialog.findViewById(R.id.prdDescription);
         prodImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,21 +104,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-       //builder.create(dialog);
+        //dialog=builder.create();
         dialog.show();
     }
 
     private void sendData() {
         //Data validation
-        try {
+
 
 
         String prodName = prdNameEt.getText().toString().trim();
-        String prodPrice = prdPriceEt.getText().toString().trim();
+        Float prodPrice = Float.valueOf(prdPriceEt.getText().toString().trim());
         String prodDescription = prdDescriptionEt.getText().toString().trim();
-        ImageView prdImage =prodImage;
-        float price= Float.parseFloat(prodPrice);
-        if (prdImage==null){
+        //ImageView prdImage =prodImage;
+        //float price= Float.parseFloat(prodPrice);
+        if (imagePath==null){
             Toast.makeText(this, "Image cannot be null", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -124,9 +127,11 @@ public class MainActivity extends AppCompatActivity {
             prdNameEt.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(prodPrice)){
-            prdPriceEt.setError("Price cannot be empty");
+
+        if (prodPrice==0){
+            prdPriceEt.setError("Price cannot be zero");
             prdPriceEt.requestFocus();
+
             return;
         }
         if (TextUtils.isEmpty(prodDescription)){
@@ -134,19 +139,28 @@ public class MainActivity extends AppCompatActivity {
             prdDescriptionEt.requestFocus();
             return;
         }
-        myHelper.insertProduct(new Product(prodName,price,prodDescription,btmpImage));
-            prdImage.setImageResource(R.drawable.ic_baseline_add_a_photo_24);
+        try {
+
+        myHelper.insertProduct(new Product(prodName,prodPrice,prodDescription,btmpImage));
+            prodImage.setImageResource(R.drawable.ic_baseline_add_a_photo_24);
             prdNameEt.setText("");
-            prdPriceEt.setText("");
+            prdPriceEt.setText(""+0);
             prdDescriptionEt.setText("");
             prdNameEt.requestFocus();
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            messaenger("Exception",e.getMessage());
         }
     }
 
+
     public void hideDialog(View view){
         dialog.dismiss();
+    }
+    public void messaenger(String tit, String mess){
+        AlertDialog.Builder builder =new AlertDialog.Builder(this);
+        builder.setTitle(tit);
+        builder.setMessage(mess);
+        builder.show();
     }
     private void openGallery() {
         try {
