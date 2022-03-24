@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         if (prodPrice==0){
             prdPriceEt.setError("Price cannot be zero");
             prdPriceEt.requestFocus();
-
             return;
         }
         if (TextUtils.isEmpty(prodDescription)){
